@@ -1,9 +1,10 @@
 import express, { Application } from "express";
+import { postRouter } from "./modules/post/post.router";
 
 const app: Application = express();
-
-
-app.use('/',async(req,res)=>{
-    res.send('Hello World')
-})
+app.use(express.json());
+app.use("/posts", postRouter);
+app.use("/", async (req, res) => {
+  res.send("Hello World");
+});
 export default app;
