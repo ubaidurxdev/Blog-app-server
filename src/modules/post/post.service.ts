@@ -1,3 +1,4 @@
+import { boolean } from "better-auth/*";
 import { Post } from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
@@ -5,9 +6,11 @@ import { prisma } from "../../lib/prisma";
 const getAllPosts = async ({
   search,
   tags,
+  isFeatured
 }: {
   search: string | undefined;
   tags: string[] | [];
+  isFeatured : boolean | undefined
 }) => {
   const andConditions: PostWhereInput[] = [];
   if (search) {
@@ -39,6 +42,11 @@ const getAllPosts = async ({
         hasEvery: tags,
       },
     });
+  }
+  if(typeof isFeatured === "boolean"){
+    andConditions.push({
+      isFeatured
+    })
   }
   const result = await prisma.post.findMany({
     where: {
