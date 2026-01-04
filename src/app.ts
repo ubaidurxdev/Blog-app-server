@@ -3,7 +3,6 @@ import { postRouter } from "./modules/post/post.router";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import cors from "cors";
-import { authentication, UserRole } from "./middleware/authentication";
 
 const app: Application = express();
 
@@ -15,7 +14,7 @@ app.use(
 );
 app.use(express.json());
 app.all("/api/auth/*splat", toNodeHandler(auth));
-app.use("/posts", authentication(UserRole.USER), postRouter);
+app.use("/posts",  postRouter);
 app.use("/", async (req, res) => {
   res.send("Hello World");
 });
