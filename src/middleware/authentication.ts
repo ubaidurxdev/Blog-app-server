@@ -13,6 +13,10 @@ declare global {
     }
   }
 }
+export enum UserRole {
+  USER = "USER",
+  ADMIN = "ADMIN",
+}
 export const authentication = (...roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -32,13 +36,20 @@ export const authentication = (...roles: string[]) => {
         });
       }
       req.user = {
-        id : session.user.id,
-        email : session.user.email,
-        name : session.user.name,
-        role  : session.user.role as string,
-        emailVerified : session.user.emailVerified 
+        id: session.user.id,
+        email: session.user.email,
+        name: session.user.name,
+        role: session.user.role as string,
+        emailVerified: session.user.emailVerified,
+      };
+      if (roles.length && !roles.includes(req.user.role as UserRole)) {
+        return res.status(403).json({
+          success: false,
+          message:
+            "Forbidden! You don't have permission to access this resources!",
+        });
       }
-       console.log(session);
+      console.log(session);
       next();
     } catch (error: any) {
       next(error);
