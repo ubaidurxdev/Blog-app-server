@@ -28,6 +28,16 @@ async function seedAdmin() {
         body: JSON.stringify(adminData),
       }
     );
+    if (signUpAdmin.ok) {
+      await prisma.user.update({
+        where: {
+          email: adminData.email as string,
+        },
+        data: {
+          emailVerified: true,
+        },
+      });
+    }
   } catch (error) {
     console.error(error);
   }
