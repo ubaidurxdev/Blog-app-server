@@ -1,4 +1,3 @@
-import { boolean } from "better-auth/*";
 import { Post, PostStatus } from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
@@ -10,6 +9,8 @@ const getAllPosts = async ({
   status,
   authorId,
   limit,
+  sortBy,
+  sortOrder,
   skip,
 }: {
   search: string | undefined;
@@ -19,6 +20,8 @@ const getAllPosts = async ({
   authorId: string | undefined;
   limit: number;
   skip: number;
+  sortBy: string | undefined;
+  sortOrder: string | undefined;
 }) => {
   const andConditions: PostWhereInput[] = [];
   if (search) {
@@ -67,11 +70,17 @@ const getAllPosts = async ({
     });
   }
   const result = await prisma.post.findMany({
-    take : limit,
+    take: limit,
     skip,
     where: {
       AND: andConditions,
     },
+    orderBy:
+      sortBy && sortOrder
+        ? {
+            [sortBy]: sortOrder,
+          }
+        : { createdAt: "desc" },
   });
   return result;
 };
