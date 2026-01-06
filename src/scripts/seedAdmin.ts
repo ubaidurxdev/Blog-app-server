@@ -9,12 +9,13 @@ async function seedAdmin() {
       role: UserRole.ADMIN,
       password: process.env.ADMIN_PASSWORD,
     };
+    console.log(adminData);
     const existingUser = await prisma.user.findUnique({
       where: {
         email: adminData.email as string,
       },
     });
-
+    console.log("is the user exist or not : ", existingUser);
     if (existingUser) {
       throw new Error("User already exists!!");
     }
@@ -23,11 +24,13 @@ async function seedAdmin() {
       {
         method: "POST",
         headers: {
-          "content-type": "application/json",
+           "origin" : "http://localhost:3000",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(adminData),
       }
     );
+    console.log(signUpAdmin);
     if (signUpAdmin.ok) {
       await prisma.user.update({
         where: {
@@ -37,8 +40,12 @@ async function seedAdmin() {
           emailVerified: true,
         },
       });
+      console.log("user created");
     }
   } catch (error) {
     console.error(error);
   }
 }
+
+seedAdmin();
+
