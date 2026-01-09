@@ -1,4 +1,3 @@
-import { ADDRGETNETWORKPARAMS } from "node:dns";
 import { Post, PostStatus } from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
@@ -99,12 +98,23 @@ const getAllPosts = async ({
 };
 
 const getPostById = async (postId: string) => {
-  const result = await prisma.post.findUnique({
-    where: {
-      id: postId,
-    },
+  return await prisma.$transaction(async (tx) => {
+    await tx.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+    return await tx.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
   });
-  return result;
 };
 
 const createPost = async (

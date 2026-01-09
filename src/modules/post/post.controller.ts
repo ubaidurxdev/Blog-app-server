@@ -48,10 +48,10 @@ const getPostById = async (req: Request, res: Response) => {
     }
     const result = await postService.getPostById(postId);
     res.status(200).json({
-      success : true,
-      message : "Get post by id",
-      data : result
-    })
+      success: true,
+      message: "Get post by id",
+      data: result,
+    });
   } catch (error: any) {
     res.status(500).json({
       success: false,
