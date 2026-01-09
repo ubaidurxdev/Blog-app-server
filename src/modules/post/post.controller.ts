@@ -22,6 +22,7 @@ const getAllPosts = async (req: Request, res: Response) => {
       isFeatured,
       status,
       authorId,
+      page,
       sortOrder,
       sortBy,
       skip,
