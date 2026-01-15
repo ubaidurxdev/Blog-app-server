@@ -14,7 +14,7 @@ const createComment = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(404).json({
       success: false,
-      message: error.message,
+      message: error
     });
   }
 };
