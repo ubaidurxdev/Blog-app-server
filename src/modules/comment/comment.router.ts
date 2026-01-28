@@ -18,6 +18,12 @@ router.patch(
   commentController.updateComment,
 );
 
+router.patch(
+  "/moderate/:commentId",
+  authentication(UserRole.ADMIN),
+  commentController.moderateComment,
+);
+
 router.delete(
   "/:commentId",
   authentication(UserRole.USER, UserRole.ADMIN),
