@@ -1,5 +1,6 @@
 import { error } from "node:console";
 import { prisma } from "../../lib/prisma";
+import { CommentStatus } from "../../../generated/prisma/enums";
 
 const createComment = async (payload: {
   content: string;
@@ -59,6 +60,29 @@ const getCommentsByAuthorId = async (id: string) => {
   });
 };
 
+const updateComment = async (
+  commentId: string,
+  data: { content: string; status: CommentStatus },
+  authorId: string,
+) => {
+  const commentData = await prisma.comment.findFirst({
+    where: {
+      id: commentId,
+      authorId,
+    },
+  });
+  if (!commentData) {
+    throw new Error("Input valid data");
+  }
+  return await prisma.comment.update({
+    where: {
+      id: commentData.id,
+      authorId,
+    },
+    data,
+  });
+};
+
 const deleteComment = async (authorId: string, commentId: string) => {
   const commentData = await prisma.comment.findFirst({
     where: {
@@ -67,7 +91,7 @@ const deleteComment = async (authorId: string, commentId: string) => {
     },
   });
   if (!commentData) {
-    throw error("Input valid data");
+    throw new Error("Input valid data");
   }
   return await prisma.comment.delete({
     where: {
@@ -75,9 +99,11 @@ const deleteComment = async (authorId: string, commentId: string) => {
     },
   });
 };
+
 export const commentService = {
   createComment,
   getCommentsByAuthorId,
   deleteComment,
+  updateComment,
   getCommentById,
 };
