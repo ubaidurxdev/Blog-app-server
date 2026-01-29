@@ -166,15 +166,6 @@ const createPost = async (
 };
 
 const getMyPosts = async (authorId: string) => {
-  await prisma.user.findUniqueOrThrow({
-    where: {
-      id: authorId,
-      status: "ACTIVE",
-    },
-    select: {
-      id: true,
-    },
-  });
   return await prisma.post.findMany({
     where: {
       authorId,
@@ -194,5 +185,5 @@ export const postService = {
   createPost,
   getAllPosts,
   getPostById,
-  getMyPosts
+  getMyPosts,
 };

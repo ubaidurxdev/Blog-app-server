@@ -83,12 +83,16 @@ const createPost = async (req: Request, res: Response) => {
 const getMyPosts = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+    if(!user) {
+      throw new Error("You are not authorized")
+    }
     const result = await postService.getMyPosts(user?.id as string);
     res.status(200).json({
       success: true,
       data: result,
     });
   } catch (error: any) {
+    console.log(error)
     res.status(404).json({
       success: false,
       message: "Post fetched failed",
