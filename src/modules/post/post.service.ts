@@ -274,7 +274,7 @@ const getStats = async () => {
       totalUsers,
       adminCount,
       userCount,
-      totalViews,
+      totalViews:totalViews._sum.views,
     };
   });
 };
