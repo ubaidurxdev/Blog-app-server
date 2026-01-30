@@ -4,6 +4,7 @@ import { authentication, UserRole } from "../../middleware/authentication";
 
 const router = Router();
 router.get("/", postController.getAllPosts);
+
 router.get(
   "/my-posts",
   authentication(UserRole.USER, UserRole.ADMIN),
@@ -16,7 +17,9 @@ router.patch(
   postController.updatePost,
 );
 router.get("/:postId", postController.getPostById);
+
 router.post("/", authentication(UserRole.USER), postController.createPost);
+
 router.post("/:postId", authentication(UserRole.USER,UserRole.ADMIN), postController.deletePost);
 
 export const postRouter: Router = router;
