@@ -101,6 +101,21 @@ const getMyPosts = async (req: Request, res: Response) => {
   }
 };
 
+const getStats = async (req: Request, res: Response) => {
+  try {
+    const result = await postService.getStats()
+    res.status(200).json({
+      success:true,
+      data:result
+    })
+  } catch (error: any) {
+    res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const updatePost = async (req: Request, res: Response) => {
   try {
     const { postId } = req.params;
@@ -154,6 +169,7 @@ export const postController = {
   createPost,
   getAllPosts,
   updatePost,
+  getStats,
   getMyPosts,
   deletePost,
   getPostById,
